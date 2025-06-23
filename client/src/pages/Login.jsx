@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import entrance from "../assets/entrance.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const formSubmitKro = (e) => {
+    e.preventDefault();
+    const logindata = {
+      Email: email,
+      Password: password,
+    }
+    console.log(logindata);
+  }
+
   return (
     <>
       <div className="mt-[-10%] relative h-screen flex justify-center items-center">
@@ -18,13 +31,15 @@ const Login = () => {
             <h2 className="text-3xl text-center font-bold text-pink-500 mb-6 drop-shadow-md">
               Login
             </h2>
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={formSubmitKro}>
               <div>
                 <label className="text-pink-500 block mb-1">Email</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder:text-gray-500 border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  className="w-full px-4 py-2 rounded-lg bg-white/20 text-black placeholder:text-gray-500 border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -32,8 +47,10 @@ const Login = () => {
                 <label className="text-pink-500 block mb-1">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder:text-gray-500 border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  className="w-full px-4 py-2 rounded-lg bg-white/20 text-black placeholder:text-gray-500 border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
