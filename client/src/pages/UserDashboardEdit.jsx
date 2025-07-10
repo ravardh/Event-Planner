@@ -3,10 +3,14 @@ import { toast } from "react-hot-toast";
 import api from "../config/api";
 import { IoIosSave } from "react-icons/io";
 import { FaCamera } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboardEdit = () => {
+  const navigate = useNavigate();
   const [userdata, setUserData] = useState("");
-  const [preview,setPreview]=useState("");
+  const [preview, setPreview] = useState("");
+  const [picture, setPicture] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchUserData = async () => {
     try {
@@ -27,13 +31,40 @@ const UserDashboardEdit = () => {
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e)=>{
-    const file = e.target.files[0];
+  const handleImageChange = (e) => {
+    setPreview(URL.createObjectURL(e.target.files[0]));
+    setPicture(e.target.files[0]);
+  };
 
-    const fileURL = URL.createObjectURL(file);
-    
-    setPreview(fileURL);
-  }
+  const handleEditProfile = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+
+    formData.append("fullName", userdata.fullName);
+    formData.append("email", userdata.email);
+    formData.append("picture", picture);
+
+    try {
+      const res = await api.put("/user/update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(res.data.message);
+      setUserData(res.data.data);
+      navigate("/userDashboard");
+    } catch (error) {
+      toast.error(
+        `Error : ${error.response?.status || error.message} | ${
+          error.response?.data.message || ""
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchUserData();
@@ -59,7 +90,12 @@ const UserDashboardEdit = () => {
             <label className="text-2xl" htmlFor="imageUpload">
               <FaCamera />
             </label>
-            <input type="file" className="hidden" id="imageUpload"  onChange={handleImageChange}/>
+            <input
+              type="file"
+              className="hidden"
+              id="imageUpload"
+              onChange={handleImageChange}
+            />
           </div>
         </div>
         <div className="grid justify-around gap-5">
@@ -87,10 +123,12 @@ const UserDashboardEdit = () => {
             />
           </h3>
         </div>
-        <button className="absolute top-1 right-1 border p-2 rounded-lg flex gap-2 justify-center items-center bg-rose-300 hover:bg-rose-400 text-lg">
-          {" "}
+        <button
+          className="absolute top-1 right-1 border p-2 rounded-lg flex gap-2 justify-center items-center bg-rose-300 hover:bg-rose-400 text-lg"
+          onClick={handleEditProfile}
+        >
           <IoIosSave />
-          Save Data
+          {loading ? "Saving Data . . . " : "Save Data"}
         </button>
       </div>
     </>
