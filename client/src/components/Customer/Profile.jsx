@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileEditModal from "./profileEditModal";
 
 const Profile = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [userdata, setUserData] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
