@@ -7,7 +7,7 @@ import Support from "../components/Customer/Support";
 import Feedback from "../components/Customer/Feedback";
 
 const CustomerDashboard = () => {
-  const [active, setActive] = useState("overview");
+  const [active, setActive] = useState("profile");
 
   return (
     <>
