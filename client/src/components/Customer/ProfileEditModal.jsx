@@ -2,6 +2,38 @@ import React, { useEffect, useState } from "react";
 import { IoIosCloseCircle, IoIosSave } from "react-icons/io";
 import { FaCamera } from "react-icons/fa";
 import api from "../../config/api";
+import {toast} from 'react-hot-toast'
+
+const indianStates = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+];
 
 const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
   const [userdata, setUserData] = useState({
@@ -9,6 +41,13 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
     email: "",
     phone: "",
     photo: "",
+    gender: "",
+    occupation: "",
+    address: "",
+    city: "",
+    state: "",
+    district: "",
+    representing: "",
   });
 
   const [preview, setPreview] = useState("");
@@ -32,8 +71,15 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
     const formData = new FormData();
 
     formData.append("fullName", userdata.fullName);
-    formData.append("email", userdata.email);
     formData.append("picture", picture);
+    formData.append("phone", userdata.phone);
+    formData.append("gender", userdata.gender);
+    formData.append("occupation", userdata.occupation);
+    formData.append("address", userdata.address);
+    formData.append("city", userdata.city);
+    formData.append("state", userdata.state);
+    formData.append("district", userdata.district);
+    formData.append("representing", userdata.representing);
 
     try {
       const res = await api.put("/user/update", formData, {
@@ -43,7 +89,7 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
       });
       toast.success(res.data.message);
       setUserData(res.data.data);
-      navigate("/userDashboard");
+      onClose();
     } catch (error) {
       toast.error(
         `Error : ${error.response?.status || error.message} | ${
@@ -57,12 +103,7 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
 
   useEffect(() => {
     if (oldData) {
-      setUserData({
-        fullName: oldData.fullName || "",
-        email: oldData.email || "",
-        phone: oldData.phone || "",
-        photo: oldData.photo || "",
-      });
+      setUserData(oldData);
     }
   }, [isOpen, oldData]);
 
@@ -70,7 +111,9 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
   return (
     <>
       <div className="inset-0 fixed bg-black/70 flex justify-center items-center">
-        <div className={`border w-1/2 max-h-7/10 mt-10 bg-white rounded-lg overflow-y-auto`}>
+        <div
+          className={`border w-1/2 max-h-7/10 mt-10 bg-white rounded-lg overflow-y-auto`}
+        >
           <div className="text-xl flex justify-between p-3 border-b-2 sticky top-0 bg-white z-10">
             <h1 className="font-bold">Edit Profile</h1>
             <button onClick={onClose}>
@@ -127,7 +170,7 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
                 className="p-2 border rounded-lg border-rose-300 w-full"
               />
               <span className="font-bold text-md">Gender : </span>
-              
+
               <select
                 name="gender"
                 value={userdata.gender}
@@ -135,35 +178,70 @@ const ProfileEditModal = ({ isOpen, onClose, oldData }) => {
                 className="p-2 border rounded-lg border-rose-300 w-full"
               >
                 <option value="N/A">N/A</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
-              <span className="font-bold text-md">Name : </span>
+              <span className="font-bold text-md">Occupation : </span>
               <input
                 type="text"
-                name="fullname"
-                value={userdata.fullName}
+                name="occupation"
+                value={userdata.occupation}
                 onChange={handelChange}
                 className="p-2 border rounded-lg border-rose-300 w-full"
               />
-              <span className="font-bold text-md">Name : </span>
+              <span className="font-bold text-md">Address : </span>
               <input
                 type="text"
-                name="fullname"
-                value={userdata.fullName}
+                name="address"
+                value={userdata.address}
                 onChange={handelChange}
                 className="p-2 border rounded-lg border-rose-300 w-full"
               />
-              <span className="font-bold text-md">Name : </span>
+              <span className="font-bold text-md">City : </span>
               <input
                 type="text"
-                name="fullname"
-                value={userdata.fullName}
+                name="city"
+                value={userdata.city}
                 onChange={handelChange}
                 className="p-2 border rounded-lg border-rose-300 w-full"
               />
+              <span className="font-bold text-md">District : </span>
+              <input
+                type="text"
+                name="district"
+                value={userdata.district}
+                onChange={handelChange}
+                className="p-2 border rounded-lg border-rose-300 w-full"
+              />
+              <span className="font-bold text-md">State : </span>
+              <select
+                name="state"
+                value={userdata.state}
+                onChange={handelChange}
+                className="p-2 border rounded-lg border-rose-300 w-full"
+              >
+                <option value="N/A">N/A</option>
+                {indianStates ? (indianStates.map(
+                  (rajya,i)=><option value={rajya} key={i}>{rajya}</option>
+                )
+                  
+                ) : (
+                  <option value={""}>No states available</option>
+                )}
+              </select>
+              <span className="font-bold text-md">Representing : </span>
+              <select
+                name="representing"
+                value={userdata.representing}
+                onChange={handelChange}
+                className="p-2 border rounded-lg border-rose-300 w-full"
+              >
+                <option value="N/A">N/A</option>
+                <option value="Bride">Bride side</option>
+                <option value="Groom">Groom Side</option>
+                <option value="both">Common</option>
+              </select>
             </div>
 
             <button

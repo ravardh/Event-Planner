@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import api from "../../config/api";
 import { FaUserEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import ProfileEditModal from "./profileEditModal";
+import AccountDeactivateModal from "./AccountDeactivateModal";
 
 const Profile = () => {
-  //const navigate = useNavigate();
   const [userdata, setUserData] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
 
   const fetchUserData = async () => {
     try {
       const res = await api.get("/user/profile");
       setUserData(res.data.data);
-      toast.success(res.data.message);
     } catch (error) {
       toast.error(
         `Error : ${error.response?.status || error.message} | ${
@@ -26,14 +25,14 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [isEditModalOpen]);
 
   return (
     <>
       <div className="flex justify-between bg-gradient-to-r from-pink-600 to-purple-600 p-4 shadow-lg">
         <h1 className="text-3xl font-bold text-white">Profile</h1>
         <button
-          className="border border-white hover:scale-105 text-white p-2 rounded-lg font-bold flex gap-2 justify-center items-center hover:bg-pink-600 text-lg"
+          className="border border-white hover:scale-105 cursor-pointer text-white p-2 rounded-lg font-bold flex gap-2 justify-center items-center hover:bg-pink-600 text-lg"
           onClick={() => setIsEditModalOpen(true)}
         >
           {" "}
@@ -99,6 +98,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <button
+        className="border border-red-500 hover:scale-105 mx-5 float-end text-red-500 p-2 rounded-lg font-bold flex gap-2 justify-center items-center hover:bg-red-500 hover:text-white cursor-pointer text-lg"
+        onClick={() => {
+          setIsDeactivateModalOpen(true);
+        }}
+      >
+        Deactivate My acoount
+      </button>
 
       <ProfileEditModal
         isOpen={isEditModalOpen}
@@ -106,6 +113,13 @@ const Profile = () => {
           setIsEditModalOpen(false);
         }}
         oldData={userdata}
+      />
+
+      <AccountDeactivateModal
+        isOpen={isDeactivateModalOpen}
+        onClose={() => {
+          setIsDeactivateModalOpen(false);
+        }}
       />
     </>
   );
