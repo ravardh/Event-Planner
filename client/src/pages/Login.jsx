@@ -3,9 +3,11 @@ import entrance from "../assets/entrance.jpg";
 import { useNavigate } from "react-router-dom";
 import api from "../config/api";
 import { toast } from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { user, setUser, isLogin, setIsLogin, isAdmin, setIsAdmin } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +24,12 @@ const Login = () => {
       toast.success(res.data.message);
       setPassword("");
       setEmail("");
-      navigate("/dashboard");
+      setUser(res.data.data);
+      sessionStorage.setItem("EventUser",JSON.stringify(res.data.data));
+      setIsLogin(true);
+      res.data.data.role === "Admin"
+        ? (setIsAdmin(true), navigate("/adminpanel"))
+        : navigate("/dashboard");
     } catch (error) {
       toast.error(
         `Error : ${error.response?.status || error.message} | ${
