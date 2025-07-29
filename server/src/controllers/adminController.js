@@ -51,7 +51,7 @@ export const UpdateContacts = async (req, res, next) => {
         <span style="color: #000;">${updatedQuery.reply}</span>
       </p>
 
-       <p style="margin: 10px 0;"><strong style="color: #555;">Note:</strong><br />
+       <p style="margin: 10px 0;"><strong style="color: #555;">Note:</strong>
         <span style="color: #000;">Please Contact Again if Required.</span>
       </p>
 
