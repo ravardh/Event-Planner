@@ -72,7 +72,15 @@ export const UpdateContacts = async (req, res, next) => {
   </div>
     `;
 
-    await sendEmail(updatedQuery.email, updatedQuery.subject, mailBody);
+    const MailStatus = await sendEmail(
+      updatedQuery.email,
+      updatedQuery.subject,
+      mailBody
+    );
+
+    if (!MailStatus) {
+      console.log("Error Sending Email");
+    }
 
     res.status(200).json({ message: "Contact Updated", data: updatedQuery });
   } catch (error) {
