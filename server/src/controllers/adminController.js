@@ -87,3 +87,5 @@ export const UpdateContacts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const AddNewBanquetHall = async (req, res, next) => {};
