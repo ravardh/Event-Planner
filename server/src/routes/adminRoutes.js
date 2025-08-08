@@ -18,7 +18,7 @@ router.post(
   "/AddBanquetHall",
   Protect,
   isAdmin,
-  upload.array("pictures"),
+  upload.array("pictures",5),
   AddNewBanquetHall
 );
 

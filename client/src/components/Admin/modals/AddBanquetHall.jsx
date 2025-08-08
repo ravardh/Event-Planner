@@ -56,6 +56,8 @@ const AddBanquetHall = ({ isOpen, onClose }) => {
       });
     }
 
+    console.log(formData.pictures);
+
     try {
       const res = await api.post("/admin/AddBanquetHall", formData, {
         headers: {
@@ -63,6 +65,7 @@ const AddBanquetHall = ({ isOpen, onClose }) => {
         },
       });
       toast.success(res.data.message);
+      console.log(res.data.data);
     } catch (error) {
       toast.error(
         `Error : ${error.response?.status || error.message} | ${
@@ -209,7 +212,9 @@ const AddBanquetHall = ({ isOpen, onClose }) => {
               </div>
 
               <div>
-                <label className="block mb-1 font-medium">Photos</label>
+                <label className="block mb-1 font-medium">
+                  Photos (Max: 5 Photos, Size: &lt;1MB/photo)
+                </label>
                 <input
                   type="file"
                   name="photos"

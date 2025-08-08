@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const BanquetSchema = new Schema(
+const BanquetSchema = mongoose.Schema(
   {
     hallName: {
       type: String,
@@ -43,7 +43,7 @@ const BanquetSchema = new Schema(
       required: true,
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 const Banquet = mongoose.model("Banquet", BanquetSchema);
