@@ -3,6 +3,7 @@ import {
   GetAllContacts,
   UpdateContacts,
   AddNewBanquetHall,
+  GetAllBanquetHalls,
 } from "../controllers/adminController.js";
 import { isAdmin, Protect } from "../middlewares/authMiddleware.js";
 import multer from "multer";
@@ -18,8 +19,10 @@ router.post(
   "/AddBanquetHall",
   Protect,
   isAdmin,
-  upload.array("pictures",5),
+  upload.array("pictures", 5),
   AddNewBanquetHall
 );
+
+router.get("/banquetHalls", Protect, isAdmin, GetAllBanquetHalls);
 
 export default router;

@@ -5,24 +5,24 @@ import cloudinary from "../config/cloudinary.js";
 import Banquet from "../models/BanquetMondel.js";
 
 const UploadMultipleToCloudinary = async (Images) => {
-// const UploadMultipleToCloudinary = (Images) => {
-//   const ImageUrls = [];
-//   Images.forEach(async (image) => {
-//     const b64 = Buffer.from(image.buffer).toString("base64");
-//     const dataURI = `data:${image.mimetype};base64,${b64}`;
+  // const UploadMultipleToCloudinary = (Images) => {
+  //   const ImageUrls = [];
+  //   Images.forEach(async (image) => {
+  //     const b64 = Buffer.from(image.buffer).toString("base64");
+  //     const dataURI = `data:${image.mimetype};base64,${b64}`;
 
-//     const result = await cloudinary.uploader.upload(dataURI, {
-//       folder: "EventManagement",
-//       width: 500,
-//       height: 500,
-//       crop: "fill",
-//     });
+  //     const result = await cloudinary.uploader.upload(dataURI, {
+  //       folder: "EventManagement",
+  //       width: 500,
+  //       height: 500,
+  //       crop: "fill",
+  //     });
 
-//     ImageUrls.push(result.secure_url);
-//   });
+  //     ImageUrls.push(result.secure_url);
+  //   });
 
-//   return ImageUrls;
-// };
+  //   return ImageUrls;
+  // };
 
   const uploadPromises = Images.map(async (image) => {
     const b64 = Buffer.from(image.buffer).toString("base64");
@@ -167,6 +167,18 @@ export const AddNewBanquetHall = async (req, res, next) => {
     res
       .status(200)
       .json({ message: "Banquet Hall Added", data: NewBanquetHall });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const GetAllBanquetHalls = async (req, res, next) => {
+  try {
+    const AllBanquetHalls = (await Banquet.find()) || "";
+
+    res
+      .status(200)
+      .json({ message: "All Data Fetched", data: AllBanquetHalls });
   } catch (error) {
     next(error);
   }

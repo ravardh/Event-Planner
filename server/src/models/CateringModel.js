@@ -26,7 +26,16 @@ const CateringSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    details: { type: String },
+    details: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["Active", "Inactive", "Suspended"],
+      default: "Active",
+    },
   },
   { timeStamps: true }
 );

@@ -42,6 +42,12 @@ const BanquetSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+      enum: ["Active", "Inactive", "Suspended"],
+      default: "Active",
+    },
   },
   { timestamps: true }
 );
